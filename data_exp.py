@@ -1,3 +1,7 @@
+'''
+    Acknowledgement: The code below is heavily inspired by the work of snakoneczny.
+'''
+
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
@@ -45,9 +49,3 @@ class ExperimentalData():
         X_test, y_test = self.data.loc[self.idx_test, self.features], self.data.loc[self.idx_test, self.clf_target]
 
         return self.preprocess_features.transform(X_test), self.preprocess_target(y_test)
-
-
-
-
-    
-    
