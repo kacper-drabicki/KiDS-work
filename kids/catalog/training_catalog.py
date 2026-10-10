@@ -13,7 +13,7 @@ def rename_class(df: pd.DataFrame) -> pd.DataFrame:
     '''
     return df.rename(columns={'CLASS': 'SPECTYPE'}) # No error will be raised if the column does not exist, as we are using the rename method with a dictionary.
 
-def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
+def load_and_prepare_training_catalog(file_path: str) -> pd.DataFrame:
     df = (
         load_catalog(file_path)
         .pipe(clean_mask)
@@ -25,6 +25,6 @@ def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
     )
     return df
 
-def merge_catalogs(catalog_one: pd.DataFrame, catalog_two: pd.DataFrame) -> pd.DataFrame:
+def merge_training_catalogs(catalog_one: pd.DataFrame, catalog_two: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([catalog_one, catalog_two]).drop_duplicates(subset=['ID'], keep='first').reset_index(drop=True, inplace=False)
 
