@@ -27,9 +27,7 @@ def rename_class(df: pd.DataFrame) -> pd.DataFrame:
         SDSS and DESI catalogs have different names for the class column. 
         This function renames the column to a common name. 
     '''
-    if 'CLASS' in df:
-        df = df.rename(columns={'CLASS': 'SPECTYPE'})
-    return df
+    return df.rename(columns={'CLASS': 'SPECTYPE'}) # No error will be raised if the column does not exist, as we are using the rename method with a dictionary.
 
 def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
     df = (
@@ -39,7 +37,7 @@ def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
         .pipe(replace_sentinel)
         .pipe(add_colors)
         .pipe(rename_class)
-        .reset_index(drop=True) 
+        .reset_index(drop=True, inplace=False) 
     )
     return df
 
