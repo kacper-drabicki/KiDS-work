@@ -44,5 +44,5 @@ def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
     return df
 
 def merge_catalogs(catalog_one: pd.DataFrame, catalog_two: pd.DataFrame) -> pd.DataFrame:
-    return pd.concat([catalog_one, catalog_two]).drop_duplicates(subset=['ID'], keep='first').reset_index(drop=True)
+    return pd.concat([catalog_one, catalog_two]).drop_duplicates(subset=['ID'], keep='first').reset_index(drop=True, inplace=False)
 
