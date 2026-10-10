@@ -44,3 +44,5 @@ class XGBClf:
 
     def load(self, filepath: str) -> None:
         self.model.load_model(filepath)
+
+#------------------------------------------
