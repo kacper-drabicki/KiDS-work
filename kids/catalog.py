@@ -23,6 +23,10 @@ def add_colors(df: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([df] + colors, axis=1)
 
 def rename_class(df: pd.DataFrame) -> pd.DataFrame:
+    ''' 
+        SDSS and DESI catalogs have different names for the class column. 
+        This function renames the column to a common name. 
+    '''
     if 'CLASS' in df:
         df = df.rename(columns={'CLASS': 'SPECTYPE'})
     return df
