@@ -1,6 +1,6 @@
 import datetime
 from pathlib import Path
-from kids.catalog import load_and_prepare_catalog, merge_catalogs
+from kids.catalog.training_catalog import load_and_prepare_catalog, merge_catalogs
 from kids.classification_data import ClassificationData
 from kids.classifiers import XGBClf, XGBConfig
 

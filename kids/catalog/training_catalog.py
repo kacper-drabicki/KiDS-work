@@ -1,26 +1,10 @@
 import pandas as pd
-import numpy as np
-from itertools import combinations
-from kids.features import MAGNITUDES
-
-def load_catalog(file_path: str) -> pd.DataFrame:
-    return pd.read_csv(file_path, index_col=0)
-
-def clean_mask(df: pd.DataFrame) -> pd.DataFrame:
-    return df.loc[df['MASK'] <= 1]
+from kids.catalog.catalog import load_catalog, clean_mask, replace_sentinel, add_colors
 
 def clean_zwarn(df: pd.DataFrame) -> pd.DataFrame:
     zwarn_col = 'ZWARN' if 'ZWARN' in df else 'ZWARNING'
 
     return df.loc[df[zwarn_col] == 0]
-
-def replace_sentinel(df: pd.DataFrame) -> pd.DataFrame:
-    return df.replace([-99.0, 99.0], np.nan)
-
-def add_colors(df: pd.DataFrame) -> pd.DataFrame:
-    colors = [df[m1].sub(df[m2]).rename(f"{m1.split('_')[-1]}-{m2.split('_')[-1]}") 
-              for m1, m2 in combinations(MAGNITUDES, 2)]
-    return pd.concat([df] + colors, axis=1)
 
 def rename_class(df: pd.DataFrame) -> pd.DataFrame:
     ''' 
