@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from itertools import combinations
-from magnitudes_and_colors import MAGNITUDES
+from kids.features import MAGNITUDES
 
 def load_catalog(file_path: str) -> pd.DataFrame:
     return pd.read_csv(file_path, index_col=0)
@@ -14,7 +14,7 @@ def clean_zwarn(df: pd.DataFrame) -> pd.DataFrame:
 
     return df.loc[df[zwarn_col] == 0]
 
-def clean_sentinel(df: pd.DataFrame) -> pd.DataFrame:
+def replace_sentinel(df: pd.DataFrame) -> pd.DataFrame:
     return df.replace([-99.0, 99.0], np.nan)
 
 def add_colors(df: pd.DataFrame) -> pd.DataFrame:
@@ -27,19 +27,18 @@ def rename_class(df: pd.DataFrame) -> pd.DataFrame:
         df = df.rename(columns={'CLASS': 'SPECTYPE'})
     return df
 
-def load_and_process(file_path: str) -> pd.DataFrame:
+def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
     df = (
         load_catalog(file_path)
         .pipe(clean_mask)
         .pipe(clean_zwarn)
-        .pipe(clean_sentinel)
+        .pipe(replace_sentinel)
         .pipe(add_colors)
         .pipe(rename_class)
         .reset_index(drop=True) 
     )
-    print('DataFrame shape:', df.shape)
     return df
 
-def concat_two_catalogs(catalog_one, catalog_two):
+def merge_catalogs(catalog_one: pd.DataFrame, catalog_two: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([catalog_one, catalog_two]).drop_duplicates(subset=['ID'], keep='first').reset_index(drop=True)
 

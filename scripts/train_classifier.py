@@ -1,7 +1,6 @@
-from load_kids_catalog import load_and_process, concat_two_catalogs
-from data_exp import ExperimentalData
-from models import XGBClf, XGBConfig
-from sklearn.metrics import classification_report
+from kids.catalog import load_and_process, concat_two_catalogs
+from kids.classification_data import ExperimentalData
+from kids import XGBClf, XGBConfig
 import datetime
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%SZ")

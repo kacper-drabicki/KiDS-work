@@ -8,10 +8,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.pipeline import Pipeline
-from magnitudes_and_colors import MAGNITUDES, COLORS
+from kids.features import MAGNITUDES, COLORS
 
 
-class ExperimentalData:
+class ClassificationData:
 
     CLASS_TO_ID = {'QSO': 2, 'GALAXY': 1, 'STAR': 0}
     ID_TO_CLASS = {v: k for k, v in CLASS_TO_ID.items()}
