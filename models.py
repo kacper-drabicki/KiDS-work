@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.distributions as D
 import torch.nn.functional as F
-from numpy import nan
+import numpy as np
 from dataclasses import dataclass,  asdict
 from xgboost import XGBClassifier
 
@@ -25,7 +25,7 @@ class XGBConfig:
     reg_lambda: float = 1.0
     base_score: float = 0.5
     random_state: int = 18235
-    missing: float = nan
+    missing: float = np.nan
     verbosity: int = 0
     n_jobs: int = 32
 
@@ -39,26 +39,26 @@ class MDNConfig:
 # ------------------------------------------
 
 class XGBClf:
-    def __init__(self, config=None):
+    def __init__(self, config: XGBConfig =None):
         self.model = XGBClassifier(**asdict(config)) if config is not None else XGBClassifier()
 
-    def train(self, X_train, y_train, X_val, y_val, verbose: bool = True):
+    def train(self, X_train: np.array, y_train: np.array, X_val: np.array, y_val: np.array, verbose: bool = True) -> None:
         self.model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=verbose)
 
-    def predict(self, X):
+    def predict(self, X: np.array) -> np.array:
         return self.model.predict(X)
 
-    def save(self, filepath: str):
+    def save(self, filepath: str) -> None:
         # XGBoost automatically infers format from extension (.json or .ubj)
         self.model.save_model(filepath)
 
-    def load(self, filepath: str):
+    def load(self, filepath: str) -> None:
         self.model.load_model(filepath)
 
 # ------------------------------------------
 
 class MixtureDensityNetwork(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config: MDNConfig):
         super().__init__()
         self.config = config
 
