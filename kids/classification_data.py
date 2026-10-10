@@ -16,11 +16,19 @@ class ClassificationData:
     CLASS_TO_ID = {'QSO': 2, 'GALAXY': 1, 'STAR': 0}
     ID_TO_CLASS = {v: k for k, v in CLASS_TO_ID.items()}
 
+    @staticmethod
+    def map_class_to_id(y: pd.Series) -> pd.Series:
+        return y.map(ClassificationData.CLASS_TO_ID)
+
+    @staticmethod
+    def impute_with_max(values: np.ndarray) -> float:
+        return float(np.max(values))
+
     def __init__(self, data: pd.DataFrame, features: list[str] = MAGNITUDES + COLORS) -> None:
         self.data = data.reset_index(drop=True, inplace=False)
         self.features = features
         self.clf_target = 'SPECTYPE'
-        self.preprocess_target = lambda y: y.map(self.CLASS_TO_ID)
+        self.preprocess_clf_target = self.map_class_to_id
         
         self.make_train_split()
         self.fit_preprocessor()
@@ -32,21 +40,21 @@ class ClassificationData:
 
     def fit_preprocessor(self) -> None:
         X_train = self.data.loc[self.idx_train, self.features]
-        self.preprocess_features = Pipeline([('imputer', SimpleImputer(missing_values=np.nan, strategy=lambda x: np.max(x))),
+        self.preprocess_features = Pipeline([('imputer', SimpleImputer(missing_values=np.nan, strategy=self.impute_with_max)),
                                       ('scaler', MinMaxScaler())])
         self.preprocess_features.fit(X_train)
 
-    def get_train_clf(self) -> tuple[np.ndarray, np.ndarray]:
+    def get_train_clf(self) -> tuple[np.ndarray, pd.Series]:
         X_train, y_train = self.data.loc[self.idx_train, self.features], self.data.loc[self.idx_train, self.clf_target]
 
-        return self.preprocess_features.transform(X_train), self.preprocess_target(y_train)
+        return self.preprocess_features.transform(X_train), self.preprocess_clf_target(y_train)
 
-    def get_val_clf(self) -> tuple[np.ndarray, np.ndarray]:
+    def get_val_clf(self) -> tuple[np.ndarray, pd.Series]:
         X_val, y_val = self.data.loc[self.idx_val, self.features], self.data.loc[self.idx_val, self.clf_target]
         
-        return self.preprocess_features.transform(X_val), self.preprocess_target(y_val)
+        return self.preprocess_features.transform(X_val), self.preprocess_clf_target(y_val)
 
-    def get_test_clf(self) -> tuple[np.ndarray, np.ndarray]:
+    def get_test_clf(self) -> tuple[np.ndarray, pd.Series]:
         X_test, y_test = self.data.loc[self.idx_test, self.features], self.data.loc[self.idx_test, self.clf_target]
 
-        return self.preprocess_features.transform(X_test), self.preprocess_target(y_test)
+        return self.preprocess_features.transform(X_test), self.preprocess_clf_target(y_test)
