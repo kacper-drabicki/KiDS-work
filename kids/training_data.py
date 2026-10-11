@@ -61,16 +61,19 @@ class TrainginData:
         return self.preprocess_features.transform(X_test), self.preprocess_clf_target(y_test)
 
     def get_train_photoz(self) -> tuple[np.ndarray, pd.Series]:
-        X_train, y_train = self.data.loc[self.idx_train, self.features], self.data.loc[self.idx_train, self.photoz_target]
+        idx_train = (self.data.index.isin(self.idx_train)) & (self.data['SPECTYPE'] == 'QSO')
+        X_train, y_train = self.data.loc[idx_train, self.features], self.data.loc[idx_train, self.photoz_target]
 
         return self.preprocess_features.transform(X_train), y_train
 
     def get_val_photoz(self) -> tuple[np.ndarray, pd.Series]:
-        X_val, y_val = self.data.loc[self.idx_val, self.features], self.data.loc[self.idx_val, self.photoz_target]
+        idx_val = (self.data.index.isin(self.idx_val)) & (self.data['SPECTYPE'] == 'QSO')
+        X_val, y_val = self.data.loc[idx_val, self.features], self.data.loc[idx_val, self.photoz_target]
 
         return self.preprocess_features.transform(X_val), y_val
 
     def get_test_photoz(self) -> tuple[np.ndarray, pd.Series]:
-        X_test, y_test = self.data.loc[self.idx_test, self.features], self.data.loc[self.idx_test, self.photoz_target]
+        idx_test = (self.data.index.isin(self.idx_test)) & (self.data['SPECTYPE'] == 'QSO')
+        X_test, y_test = self.data.loc[idx_test, self.features], self.data.loc[idx_test, self.photoz_target]
 
         return self.preprocess_features.transform(X_test), y_test
