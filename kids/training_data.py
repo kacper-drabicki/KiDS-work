@@ -11,14 +11,14 @@ from sklearn.pipeline import Pipeline
 from kids.features import MAGNITUDES, COLORS
 
 
-class ClassificationData:
+class TrainginData:
 
     CLASS_TO_ID = {'QSO': 2, 'GALAXY': 1, 'STAR': 0}
     ID_TO_CLASS = {v: k for k, v in CLASS_TO_ID.items()}
 
     @staticmethod
     def map_class_to_id(y: pd.Series) -> pd.Series:
-        return y.map(ClassificationData.CLASS_TO_ID)
+        return y.map(TrainginData.CLASS_TO_ID)
 
     @staticmethod
     def impute_with_max(values: np.ndarray) -> float:
@@ -29,6 +29,7 @@ class ClassificationData:
         self.features = features
         self.clf_target = 'SPECTYPE'
         self.preprocess_clf_target = self.map_class_to_id
+        self.photoz_target = 'Z'
         
         self.make_train_split()
         self.fit_preprocessor()
@@ -58,3 +59,18 @@ class ClassificationData:
         X_test, y_test = self.data.loc[self.idx_test, self.features], self.data.loc[self.idx_test, self.clf_target]
 
         return self.preprocess_features.transform(X_test), self.preprocess_clf_target(y_test)
+
+    def get_train_photoz(self) -> tuple[np.ndarray, pd.Series]:
+        X_train, y_train = self.data.loc[self.idx_train, self.features], self.data.loc[self.idx_train, self.photoz_target]
+
+        return self.preprocess_features.transform(X_train), y_train
+
+    def get_val_photoz(self) -> tuple[np.ndarray, pd.Series]:
+        X_val, y_val = self.data.loc[self.idx_val, self.features], self.data.loc[self.idx_val, self.photoz_target]
+
+        return self.preprocess_features.transform(X_val), y_val
+
+    def get_test_photoz(self) -> tuple[np.ndarray, pd.Series]:
+        X_test, y_test = self.data.loc[self.idx_test, self.features], self.data.loc[self.idx_test, self.photoz_target]
+
+        return self.preprocess_features.transform(X_test), y_test
