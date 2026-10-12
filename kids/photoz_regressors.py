@@ -82,6 +82,12 @@ class MixtureDensityNetwork(nn.Module):
     def forward(self, x: torch.Tensor) -> D.Distribution:
         raw_output = self.backbone(x)
         return self.mixture_layer(raw_output)
+
+    def save(self, path: str) -> None:
+        torch.save(self.state_dict(), path)
+
+    def load_weights(self, path: str, device: str) -> None:
+        self.load_state_dict(torch.load(path, map_location=torch.device(device)))
         
         
 # ------------------------------------------ 
@@ -139,3 +145,9 @@ class BayesianNet(nn.Module):
         total_kl = kl1 + kl2 + kl3
 
         return self.mixture_layer(out), total_kl
+
+    def save(self, path: str) -> None:
+        torch.save(self.state_dict(), path)
+
+    def load_weights(self, path: str, device: str) -> None:
+        self.load_state_dict(torch.load(path, map_location=torch.device(device)))
