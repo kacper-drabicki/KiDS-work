@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
+from torch.optim.lr_scheduler import OneCycleLR
 from dataclasses import dataclass
 
 def get_data_loader(X: np.ndarray, y: pd.Series, batch_size: int, num_workers: int = 16) -> DataLoader:
@@ -15,7 +16,7 @@ def get_data_loader(X: np.ndarray, y: pd.Series, batch_size: int, num_workers: i
                       num_workers=num_workers,
                       persistent_workers=num_workers > 0)
 
-def train_one_epoch(model, train_loader: DataLoader, optimizer, device: str) -> float:
+def train_one_epoch(model, train_loader: DataLoader, optimizer, device: str, scheduler = None) -> float:
     model.train()   
     train_loss = 0.0    
 
@@ -28,6 +29,9 @@ def train_one_epoch(model, train_loader: DataLoader, optimizer, device: str) -> 
         batch_loss = -distribution.log_prob(y).mean()
         batch_loss.backward()
         optimizer.step()
+
+        if scheduler is not None:
+            scheduler.step()
 
         train_loss += batch_loss.item()
 
@@ -70,13 +74,13 @@ class EarlyStopping:
 
 def train_model(model, train_loader: DataLoader, val_loader: DataLoader,
                 optimizer, device: str, n_epochs: int, patience: int = 10,
-                min_delta: float = 0) -> list[dict[str, float]]:
+                min_delta: float = 0, scheduler = None) -> list[dict[str, float]]:
     early_stopping = EarlyStopping(patience=patience, min_delta=min_delta)
 
     history = []
     
     for epoch in range(n_epochs):
-        train_loss = train_one_epoch(model, train_loader, optimizer, device)
+        train_loss = train_one_epoch(model, train_loader, optimizer, device, scheduler)
         val_loss = validate(model, val_loader, device)
 
         history.append({"train_loss": train_loss, "val_loss": val_loss})
