@@ -4,7 +4,7 @@ from pathlib import Path
 
 from kids.catalog.training_catalog import load_and_prepare_training_catalog, merge_training_catalogs
 from kids.training_data import TrainginData
-from kids.training_photoz_utils import get_data_loader, train
+from kids.training_photoz_utils import get_data_loader, train_model
 from kids.photoz_regressors import MixtureDensityNetwork, MDNConfig
 
 DATA_DIR = Path("data")
@@ -33,7 +33,7 @@ def main():
 
     optimizer = Adam(model.parameters(), lr=LEARNING_RATE)
 
-    train(model, train_loader, val_loader, optimizer, DEVICE, n_epochs=N_EPOCHS)
+    train_model(model, train_loader, val_loader, optimizer, DEVICE, n_epochs=N_EPOCHS)
 
 if __name__ == '__main__':
     main()

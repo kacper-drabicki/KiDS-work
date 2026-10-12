@@ -45,7 +45,7 @@ def validate(model, val_loader: DataLoader, device: str) -> float:
 
     return val_loss / len(val_loader.dataset)
 
-def train(model, train_loader: DataLoader, val_loader: DataLoader, optimizer, device: str, n_epochs: int) -> None:
+def train_model(model, train_loader: DataLoader, val_loader: DataLoader, optimizer, device: str, n_epochs: int) -> None:
     for epoch in range(n_epochs):
         train_loss = train_one_epoch(model, train_loader, optimizer, device)
         val_loss = validate(model, val_loader, device)
