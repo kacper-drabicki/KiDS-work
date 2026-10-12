@@ -11,14 +11,14 @@ from sklearn.pipeline import Pipeline
 from kids.features import MAGNITUDES, COLORS
 
 
-class TrainginData:
+class TrainingData:
 
     CLASS_TO_ID = {'QSO': 2, 'GALAXY': 1, 'STAR': 0}
     ID_TO_CLASS = {v: k for k, v in CLASS_TO_ID.items()}
 
     @staticmethod
     def map_class_to_id(y: pd.Series) -> pd.Series:
-        return y.map(TrainginData.CLASS_TO_ID)
+        return y.map(TrainingData.CLASS_TO_ID)
 
     @staticmethod
     def impute_with_max(values: np.ndarray) -> float:
