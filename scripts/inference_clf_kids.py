@@ -26,8 +26,7 @@ def main():
     print('Running inference...')
     inference = Inferencer(
         input_path=input_path,
-        preprocessor=training_data.preprocess_features,
-        chunksize=8_000_000,
+        preprocessor=training_data.preprocess_features
     )
 
     inference.infer_class(
