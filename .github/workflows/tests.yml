@@ -19,5 +19,5 @@ jobs:
         with:
           python-version: "3.14"
 
-      - run: uv sync
+      - run: uv sync --locked
       - run: uv run pytest

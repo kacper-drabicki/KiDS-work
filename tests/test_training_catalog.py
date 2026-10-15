@@ -1,8 +1,6 @@
 import pytest
 import pandas as pd
-import numpy as np
 from kids.catalog.training_catalog import clean_zwarn, rename_class, load_and_prepare_training_catalog, merge_training_catalogs
-from kids.features import MAGNITUDES, COLORS
 
 @pytest.mark.parametrize(
         'column, values, expected_rows',
@@ -41,4 +39,7 @@ def test_merge_training_catalogs():
     
     assert len(merged_df) == 5
     assert set(merged_df['ID']) == {1, 2, 3, 4, 5}
-    assert merged_df.loc[merged_df['ID'] == 3, 'Value'].values[0] == 'C' # Keep first occurrence
+    assert merged_df.loc[merged_df['ID'] == 3, 'Value'].iloc[0] == 'C' # Keep first occurrence
+
+def test_load_and_prepare_training_catalog():
+    pass
