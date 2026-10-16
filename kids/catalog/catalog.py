@@ -16,3 +16,8 @@ def add_colors(df: pd.DataFrame) -> pd.DataFrame:
     colors = [df[m1].sub(df[m2]).rename(f"{m1.split('_')[-1]}-{m2.split('_')[-1]}") 
               for m1, m2 in combinations(MAGNITUDES, 2)]
     return pd.concat([df] + colors, axis=1)
+
+def add_ratios(df: pd.DataFrame) -> pd.DataFrame:
+    ratios = [df[m1].div(df[m2]).rename(f"{m1.split('_')[-1]}/{m2.split('_')[-1]}") 
+              for m1, m2 in combinations(MAGNITUDES, 2)]
+    return pd.concat([df] + ratios, axis=1)

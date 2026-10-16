@@ -2,7 +2,7 @@
 import pandas as pd
 from pathlib import Path
 from kids.classifiers import XGBClf
-from kids.catalog.catalog import clean_mask, add_colors, replace_sentinel
+from kids.catalog.catalog import clean_mask, replace_sentinel, add_colors, add_ratios
 from kids.features import COLORS, MAGNITUDES
 from kids.training_data import TrainingData
 
@@ -20,7 +20,9 @@ class Inferencer:
         chunk = clean_mask(chunk)
         chunk = replace_sentinel(chunk)
         chunk = add_colors(chunk)
+        chunk = add_ratios(chunk)
 
+        # return chunk.pipe(clean_mask).pipe(replace_sentinel).pipe(add_colors)
         return chunk
 
     def infer_class(self, model: XGBClf, output_path: Path) -> None:

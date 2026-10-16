@@ -1,5 +1,5 @@
 import pandas as pd
-from kids.catalog.catalog import load_catalog, clean_mask, replace_sentinel, add_colors
+from kids.catalog.catalog import load_catalog, clean_mask, replace_sentinel, add_colors, add_ratios
 
 def clean_zwarn(df: pd.DataFrame) -> pd.DataFrame:
     zwarn_col = 'ZWARN' if 'ZWARN' in df else 'ZWARNING'
@@ -20,6 +20,7 @@ def load_and_prepare_training_catalog(file_path: str) -> pd.DataFrame:
         .pipe(clean_zwarn)
         .pipe(replace_sentinel)
         .pipe(add_colors)
+        .pipe(add_ratios)
         .pipe(rename_class)
         .reset_index(drop=True, inplace=False) 
     )
