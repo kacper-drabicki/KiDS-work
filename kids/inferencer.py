@@ -1,9 +1,9 @@
 # import logging / for laters
 import pandas as pd
 from pathlib import Path
+from kids.logger import logger
 from kids.classifiers import XGBClf
 from kids.catalog.catalog import clean_mask, replace_sentinel, add_colors, add_ratios
-from kids.features import COLORS, MAGNITUDES
 from kids.training_data import TrainingData
 
 class Inferencer:
@@ -48,7 +48,7 @@ class Inferencer:
                                 header=not wrote_header,
                                 index=False)
 
-            print(f"Wrote {len(output_chunk)} rows to {output_path}. Total rows written: {total_rows_written + len(output_chunk)}")
+            logger.info(f"Wrote {len(output_chunk)} rows to {output_path}. Total rows written: {total_rows_written + len(output_chunk)}")
             total_rows_written += len(output_chunk)
 
             wrote_header = True

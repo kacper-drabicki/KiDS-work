@@ -11,7 +11,7 @@ DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
 SDSS_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv'
 
 INPUT_PATH = DATA_DIR / 'KiDS_DR5_WCScut_columns.csv'
-OUTPUT_PATH = DATA_DIR / 'inference/inference_predictions.csv'
+OUTPUT_PATH = DATA_DIR / 'inference/KiDS_DR5_WCScut_columns_SPECTYPE.csv'
 
 MODEL_PATH = Path('saved_models/classification/xgb_clf_2026-10-16T12-18-52Z.json')
 
@@ -22,7 +22,7 @@ def main():
     training_sdss = load_and_prepare_training_catalog(SDSS_CATALOG_PATH)
 
     training_catalog = merge_training_catalogs(training_desi, training_sdss)
-    training_data = TrainingData(training_catalog)
+    training_data = TrainingData(training_catalog, features=clf_features)
 
     logger.info('Loading model...')
     model = XGBClf()
