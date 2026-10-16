@@ -7,7 +7,7 @@ from kids.features import COLORS, MAGNITUDES
 from kids.training_data import TrainingData
 
 class Inferencer:
-    def __init__(self, input_path: Path, preprocessor, index_col: int = None, chunksize: int = 10_000_000, features: list[str] = MAGNITUDES+COLORS) -> None:
+    def __init__(self, input_path: Path, preprocessor, features: list[str], index_col: int = None, chunksize: int = 10_000_000) -> None:
         self.input_path = input_path
         self.preprocessor = preprocessor
         self.chunksize = chunksize
