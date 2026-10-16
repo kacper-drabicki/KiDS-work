@@ -3,6 +3,7 @@ from pathlib import Path
 from kids.catalog.training_catalog import load_and_prepare_training_catalog, merge_training_catalogs
 from kids.training_data import TrainingData
 from kids.classifiers import XGBClf, XGBConfig
+from kids.features import clf_features
 
 DATA_DIR = Path("data")
 DESI_CATALOG_PATH = DATA_DIR / "KiDS_DR5_WCScut_x_DESI_DR1_columns.csv"
@@ -20,7 +21,7 @@ def main():
     kids_x_sdss = load_and_prepare_training_catalog(SDSS_CATALOG_PATH)
     merged_catalogs = merge_training_catalogs(kids_x_desi, kids_x_sdss)
 
-    training_data = TrainingData(merged_catalogs)
+    training_data = TrainingData(merged_catalogs, features=clf_features)
     X_train, y_train = training_data.get_train_clf()
     X_val, y_val = training_data.get_val_clf()
 

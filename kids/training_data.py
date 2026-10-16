@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.pipeline import Pipeline
-from kids.features import MAGNITUDES, COLORS
+from kids.features import MAGNITUDES, COLORS, RATIOS
 
 
 class TrainingData:
@@ -24,7 +24,7 @@ class TrainingData:
     def impute_with_max(values: np.ndarray) -> float:
         return float(np.max(values))
 
-    def __init__(self, data: pd.DataFrame, features: list[str] = MAGNITUDES + COLORS) -> None:
+    def __init__(self, data: pd.DataFrame, features: list[str]) -> None:
         self.data = data.reset_index(drop=True, inplace=False)
         self.features = features
         self.clf_target = 'SPECTYPE'
