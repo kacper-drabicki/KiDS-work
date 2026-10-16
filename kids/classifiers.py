@@ -10,7 +10,7 @@ class XGBConfig:
     objective: str = 'multi:softmax'
     n_estimators: int = 100000
     early_stopping_rounds: int = 20
-    max_depth: int = 7
+    max_depth: int = 9
     learning_rate: float = 0.1
     gamma: float = 0.0
     min_child_weight: float = 5.0
@@ -24,7 +24,7 @@ class XGBConfig:
     random_state: int = 18235
     missing: float = np.nan
     verbosity: int = 0
-    n_jobs: int = 32
+    n_jobs: int = 16
 
 #------------------------------------------
 
