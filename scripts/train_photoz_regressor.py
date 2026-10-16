@@ -9,13 +9,13 @@ from kids.training_data import TrainingData
 from kids.training_photoz_utils import get_data_loader, train_model
 from kids.photoz_regressors import MixtureDensityNetwork, MDNConfig
 
-DATA_DIR = Path("data")
-DESI_CATALOG_PATH = DATA_DIR / "KiDS_DR5_WCScut_x_DESI_DR1_columns.csv"
-SDSS_CATALOG_PATH = DATA_DIR / "KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv"
+DATA_DIR = Path('data')
+DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
+SDSS_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv'
 
-timestamp = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%SZ")
-MODEL_DIR = Path("saved_models/photoz")
-MODEL_PATH = MODEL_DIR / f"mdn_photoz_{timestamp}.pt"
+timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
+MODEL_DIR = Path('saved_models/photoz')
+MODEL_PATH = MODEL_DIR / f'mdn_photoz_{timestamp}.pt'
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 BATCH_SIZE = 256
