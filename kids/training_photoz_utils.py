@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
-from torch.optim.lr_scheduler import OneCycleLR
 from dataclasses import dataclass
 
 def get_data_loader(X: np.ndarray, y: pd.Series, batch_size: int, num_workers: int = 16) -> DataLoader:
