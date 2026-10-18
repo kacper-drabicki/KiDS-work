@@ -1,6 +1,6 @@
 # KiDS-work
 
-Tools for training galaxy classification and photometric-redshift models from
+Tools for training quasar classification and photometric-redshift models from
 KiDS catalog data.
 
 ## Requirements
