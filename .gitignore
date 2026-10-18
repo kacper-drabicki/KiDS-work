@@ -1,6 +1,7 @@
 # Project Related files and folders
 /data/*
 /saved_models/*
+/not_mine
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
