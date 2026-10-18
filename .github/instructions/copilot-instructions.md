@@ -1,5 +1,6 @@
 # KiDS-work Project Guidelines
 
+
 ## Python and Dependencies
 
 - Support Python `>=3.14`, as declared in `pyproject.toml`.
@@ -63,3 +64,6 @@
 - Update `README.md` when setup commands, supported Python versions, workflows, or input/output files change.
 - Document new public modules, scripts, or workflows.
 - Keep documentation concise and consistent with the existing README.
+
+
+
