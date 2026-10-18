@@ -1,6 +1,7 @@
 import pytest
 import pandas as pd
 from kids.catalog.training_catalog import clean_zwarn, rename_class, load_and_prepare_training_catalog, merge_training_catalogs
+from kids.features import MAGNITUDES
 
 @pytest.mark.parametrize(
         'column, values, expected_rows',
@@ -37,9 +38,37 @@ def test_merge_training_catalogs():
     
     merged_df = merge_training_catalogs(df1, df2)
     
-    assert len(merged_df) == 5
-    assert set(merged_df['ID']) == {1, 2, 3, 4, 5}
-    assert merged_df.loc[merged_df['ID'] == 3, 'Value'].iloc[0] == 'C' # Keep first occurrence
+    expected_df = pd.DataFrame({
+        'ID': [1, 2, 3, 4, 5],
+        'Value': ['A', 'B', 'C', 'D', 'E'],
+    })
 
-def test_load_and_prepare_training_catalog():
-    pass
+    pd.testing.assert_frame_equal(merged_df, expected_df)
+    assert merged_df.index.equals(pd.RangeIndex(5))
+
+
+def test_load_and_prepare_training_catalog(tmp_path):
+    catalog = pd.DataFrame({
+        'ID': ['kept', 'bad-mask', 'bad-warning'],
+        'CLASS': ['QSO', 'STAR', 'GALAXY'],
+        'MASK': [0, 2, 1],
+        'ZWARN': [0, 0, 1],
+        **{
+            magnitude: [float(index + 1), 10.0, 20.0]
+            for index, magnitude in enumerate(MAGNITUDES)
+        },
+    })
+    catalog.loc[0, 'MAG_GAAP_u'] = -99.0
+    catalog_path = tmp_path / 'training_catalog.csv'
+    catalog.to_csv(catalog_path)
+
+    prepared_catalog = load_and_prepare_training_catalog(str(catalog_path))
+
+    assert prepared_catalog['ID'].tolist() == ['kept']
+    assert prepared_catalog['SPECTYPE'].tolist() == ['QSO']
+    assert 'CLASS' not in prepared_catalog
+    assert prepared_catalog.index.equals(pd.RangeIndex(1))
+    assert pd.isna(prepared_catalog.loc[0, 'MAG_GAAP_u'])
+    assert pd.isna(prepared_catalog.loc[0, 'u-g'])
+    assert prepared_catalog.loc[0, 'g-r'] == -1.0
+    assert prepared_catalog.loc[0, 'g/r'] == 2.0 / 3.0
