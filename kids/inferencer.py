@@ -6,7 +6,7 @@ from kids.catalog.catalog import clean_mask, replace_sentinel, add_colors, add_r
 from kids.training_data import TrainingData
 
 class Inferencer:
-    def __init__(self, input_path: Path, preprocessor, features: list[str], index_col: int = None, chunksize: int = 10_000_000) -> None:
+    def __init__(self, input_path: Path, preprocessor, features: list[str], index_col = None, chunksize: int = 1_000_000) -> None:
         self.input_path = input_path
         self.preprocessor = preprocessor
         self.chunksize = chunksize
@@ -39,16 +39,18 @@ class Inferencer:
             transformed_features = self.preprocessor.transform(features)
 
             prediction_ids = model.predict(transformed_features).astype(int)
-            prepared_chunk['PREDICTED_CLASS'] = pd.Series(prediction_ids, index=prepared_chunk.index).map(TrainingData.ID_TO_CLASS).fillna("Unknown")
+
+            output_chunk = chunk.loc[prepared_chunk.index].copy()
+            output_chunk['PREDICTED_CLASS'] = pd.Series(prediction_ids, index=prepared_chunk.index).map(TrainingData.ID_TO_CLASS).fillna("Unknown")
             
-            prepared_chunk.to_csv(
+            output_chunk.to_csv(
                 output_path, 
                 mode="w" if not wrote_header else "a", 
                 header=not wrote_header, 
                 index=False
             )
             
-            chunk_len = len(prepared_chunk)
+            chunk_len = len(output_chunk)
             total_rows_written += chunk_len
             logger.info(f"Wrote {chunk_len} rows to {output_path}. Total rows written: {total_rows_written}")
             wrote_header = True
