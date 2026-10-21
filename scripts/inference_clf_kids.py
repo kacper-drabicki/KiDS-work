@@ -13,7 +13,7 @@ SDSS_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv'
 INPUT_PATH = DATA_DIR / 'KiDS_DR5_WCScut_columns.csv'
 OUTPUT_PATH = DATA_DIR / 'inference/KiDS_DR5_WCScut_columns_SPECTYPE.csv'
 
-MODEL_PATH = Path('saved_models/classification/xgb_clf_2026-10-16T12-18-52Z.json')
+MODEL_PATH = Path('saved_models/classification/xgb_clf_2026-10-20T20-10-35Z.json')
 
 def main():
 
