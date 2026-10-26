@@ -3,7 +3,7 @@ from pathlib import Path
 from kids.logger import logger
 from kids.catalog.training_catalog import load_and_prepare_training_catalog, merge_training_catalogs
 from kids.training_data import TrainingData
-from kids.classifiers import XGBClf, XGBConfig
+from kids.ml.classifiers import XGBClf, XGBConfig
 from kids.features import clf_features
 
 DATA_DIR = Path('data')

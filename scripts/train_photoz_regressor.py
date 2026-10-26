@@ -6,8 +6,8 @@ from pathlib import Path
 
 from kids.catalog.training_catalog import load_and_prepare_training_catalog, merge_training_catalogs
 from kids.training_data import TrainingData
-from kids.training_photoz_utils import get_data_loader, train_model
-from kids.photoz_regressors import MixtureDensityNetwork, MDNConfig
+from kids.ml.training_photoz_utils import get_data_loader, train_model
+from kids.ml.photoz_regressors import MixtureDensityNetwork, MDNConfig
 
 DATA_DIR = Path('data')
 DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
