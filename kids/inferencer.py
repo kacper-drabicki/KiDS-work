@@ -25,6 +25,8 @@ class Inferencer:
         return chunk
 
     def infer_class(self, model: XGBClf, output_path: Path) -> None:
+        id_to_class = TrainingData.ID_TO_CLASS
+        
         wrote_header = False
 
         total_rows_written = 0
@@ -41,7 +43,7 @@ class Inferencer:
             prediction_ids = model.predict(transformed_features).astype(int)
 
             output_chunk = chunk.loc[prepared_chunk.index].copy()
-            output_chunk['PREDICTED_CLASS'] = pd.Series(prediction_ids, index=prepared_chunk.index).map(TrainingData.ID_TO_CLASS).fillna("Unknown")
+            output_chunk['PREDICTED_CLASS'] = pd.Series(prediction_ids, index=prepared_chunk.index).map(id_to_class).fillna("Unknown")
             
             output_chunk.to_csv(
                 output_path, 
