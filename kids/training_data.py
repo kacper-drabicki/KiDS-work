@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.pipeline import Pipeline
-from kids.features import MAGNITUDES, COLORS, RATIOS
 
 
 class TrainingData:
