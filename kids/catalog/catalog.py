@@ -3,8 +3,8 @@ import numpy as np
 from itertools import combinations
 from kids.features import MAGNITUDES
 
-def load_catalog(file_path: str) -> pd.DataFrame:
-    return pd.read_csv(file_path, index_col=0)
+def load_catalog(file_path: str, index_col: int | None = None) -> pd.DataFrame:
+    return pd.read_csv(file_path, index_col=index_col)
 
 def clean_mask(df: pd.DataFrame) -> pd.DataFrame:
     return df.loc[df['MASK'] <= 1]
@@ -21,3 +21,14 @@ def add_ratios(df: pd.DataFrame) -> pd.DataFrame:
     ratios = [df[m1].div(df[m2]).rename(f"{m1.split('_')[-1]}/{m2.split('_')[-1]}") 
               for m1, m2 in combinations(MAGNITUDES, 2)]
     return pd.concat([df] + ratios, axis=1)
+
+def load_and_prepare_catalog(file_path: str) -> pd.DataFrame:
+    df = (
+        load_catalog(file_path)
+        .pipe(clean_mask)
+        .pipe(replace_sentinel)
+        .pipe(add_colors)
+        .pipe(add_ratios)
+        .reset_index(drop=True, inplace=False)
+    )
+    return df   

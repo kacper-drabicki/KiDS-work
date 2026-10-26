@@ -15,7 +15,7 @@ def rename_class(df: pd.DataFrame) -> pd.DataFrame:
 
 def load_and_prepare_training_catalog(file_path: str) -> pd.DataFrame:
     df = (
-        load_catalog(file_path)
+        load_catalog(file_path, index_col=0)
         .pipe(clean_mask)
         .pipe(clean_zwarn)
         .pipe(replace_sentinel)
