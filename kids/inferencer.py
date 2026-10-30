@@ -1,9 +1,10 @@
 import pandas as pd
 from pathlib import Path
 from kids.logger import logger
-from kids.ml.classifiers import XGBClf
-from kids.catalog.catalog import clean_mask, replace_sentinel, add_colors, add_ratios
-from kids.training_data import TrainingData
+from kids.ml.classification.classifier import XGBClf
+from kids.catalog.cleaning import clean_mask, replace_sentinel
+from kids.catalog.features import add_colors, add_ratios
+from kids.ml.training_data import TrainingData
 
 class Inferencer:
     def __init__(self, input_path: Path, preprocessor, features: list[str], index_col = None, chunksize: int = 1_000_000) -> None:

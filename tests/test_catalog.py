@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-from kids.catalog.catalog import clean_mask, replace_sentinel, add_colors, add_ratios
-from kids.features import MAGNITUDES, COLORS, RATIOS
+from kids.catalog.cleaning import clean_mask, replace_sentinel
+from kids.catalog.features import add_colors, add_ratios
+from kids.catalog.features import MAGNITUDES, COLORS, RATIOS
 
 def test_clean_mask():
    df = pd.DataFrame({'MASK': [0, 2, 1, 3]})

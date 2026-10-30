@@ -1,7 +1,8 @@
 import pytest
 import pandas as pd
-from kids.catalog.training_catalog import clean_zwarn, rename_class, load_and_prepare_training_catalog, merge_training_catalogs
-from kids.features import MAGNITUDES
+from kids.catalog.cleaning import clean_zwarn, rename_class
+from kids.catalog.preparation import load_and_prepare_training_catalog, merge_training_catalogs
+from kids.catalog.features import MAGNITUDES
 
 @pytest.mark.parametrize(
         'column, values, expected_rows',

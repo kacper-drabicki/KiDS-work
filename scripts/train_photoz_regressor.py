@@ -4,10 +4,10 @@ from torch.optim import Adam
 from torch.optim.lr_scheduler import OneCycleLR
 from pathlib import Path
 
-from kids.catalog.training_catalog import load_and_prepare_training_catalog, merge_training_catalogs
-from kids.training_data import TrainingData
-from kids.ml.training_photoz_utils import get_data_loader, train_model
-from kids.ml.photoz_regressors import MixtureDensityNetwork, MDNConfig
+from kids.catalog.preparation import load_and_prepare_training_catalog, merge_training_catalogs
+from kids.ml.training_data import TrainingData
+from kids.ml.photoz.photoz_training_utils import get_data_loader, train_model
+from kids.ml.photoz.photoz_regressors import MixtureDensityNetwork, MDNConfig
 
 DATA_DIR = Path('data')
 DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
@@ -24,6 +24,9 @@ N_EPOCHS = 200
 PATIENCE = 30
 
 def main() -> None:
+    
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+
     kids_x_desi = load_and_prepare_training_catalog(DESI_CATALOG_PATH)
     kids_x_sdss = load_and_prepare_training_catalog(SDSS_CATALOG_PATH)
     merged_catalogs = merge_training_catalogs(kids_x_desi, kids_x_sdss)

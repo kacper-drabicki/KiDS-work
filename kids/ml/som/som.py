@@ -1,22 +1,20 @@
-from dataclasses import dataclass
-
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from torchsom.core import SOM
 from tqdm.auto import tqdm
+from dataclasses import dataclass
 
+# ------------------------------------------ 
 
-@dataclass(frozen=True)
+@dataclass
 class SOMConfig:
-    preprocessor_sample_size: int = 2_500_000
-    random_state: int = 42
     x: int = 60
     y: int = 60
+    num_features: int = 91
     epochs: int = 35
     batch_size: int = 4 * 1024
     learning_rate: float = 0.8
     sigma: float = 30
-    device: str = "auto"
     topology: str = "rectangular"
     pbc: bool = True
     lr_decay_function: str = "asymptotic_decay"
@@ -24,33 +22,9 @@ class SOMConfig:
     neighborhood_function: str = "gaussian"
     distance_function: str = "euclidean"
     initialization_mode: str = "pca"
+    random_seed: int = 6487362742
 
-    def resolved_device(self) -> str:
-        if self.device == "auto":
-            return "cuda" if torch.cuda.is_available() else "cpu"
-        if self.device == "cuda" and not torch.cuda.is_available():
-            raise RuntimeError("SOM device 'cuda' was requested, but CUDA is unavailable")
-        return self.device
-
-    def model_parameters(self, num_features: int) -> dict[str, object]:
-        return {
-            "x": self.x,
-            "y": self.y,
-            "num_features": num_features,
-            "epochs": self.epochs,
-            "batch_size": self.batch_size,
-            "learning_rate": self.learning_rate,
-            "sigma": self.sigma,
-            "device": self.resolved_device(),
-            "topology": self.topology,
-            "pbc": self.pbc,
-            "lr_decay_function": self.lr_decay_function,
-            "sigma_decay_function": self.sigma_decay_function,
-            "neighborhood_function": self.neighborhood_function,
-            "distance_function": self.distance_function,
-            "initialization_mode": self.initialization_mode,
-        }
-
+# ------------------------------------------ 
 
 class MySOM(SOM):
     def fit(self, data: torch.Tensor, verbose: bool = True) -> tuple[list[float], list[float]]:
@@ -95,4 +69,4 @@ class MySOM(SOM):
 
     _VALID_RETRIEVAL_MODES = ("bmu_only", "bmu_neighborhood", "bmu_neighborhood_knn")
 
-# -------------------------------------
+# ------------------------------------------ 

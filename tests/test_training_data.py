@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from kids.training_data import TrainingData
+from kids.ml.training_data import TrainingData
 
 @pytest.fixture
 def data():

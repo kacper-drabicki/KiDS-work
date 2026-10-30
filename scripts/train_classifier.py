@@ -1,10 +1,10 @@
 import datetime
 from pathlib import Path
 from kids.logger import logger
-from kids.catalog.training_catalog import load_and_prepare_training_catalog, merge_training_catalogs
-from kids.training_data import TrainingData
-from kids.ml.classifiers import XGBClf, XGBConfig
-from kids.features import clf_features
+from kids.catalog.preparation import load_and_prepare_training_catalog, merge_training_catalogs
+from kids.ml.training_data import TrainingData
+from kids.ml.classification.classifier import XGBClf, XGBConfig
+from kids.catalog.features import CLF_FEATURES
 
 DATA_DIR = Path('data')
 DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
@@ -25,7 +25,7 @@ def main() -> None:
     merged_catalogs = merge_training_catalogs(kids_x_desi, kids_x_sdss)
 
     logger.info('Preparing training data ...')
-    training_data = TrainingData(merged_catalogs, features=clf_features, train_size=0.6)
+    training_data = TrainingData(merged_catalogs, features=CLF_FEATURES, train_size=0.6)
     X_train, y_train = training_data.get_train_clf()
     X_val, y_val = training_data.get_val_clf()
 
