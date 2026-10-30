@@ -2,6 +2,7 @@
 /data/*
 /saved_models/*
 /not_mine
+/figs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
