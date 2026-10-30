@@ -23,8 +23,9 @@ class TrainingData:
     def impute_with_max(values: np.ndarray) -> float:
         return float(np.max(values))
 
-    def __init__(self, data: pd.DataFrame, features: list[str]) -> None:
+    def __init__(self, data: pd.DataFrame, features: list[str], train_size: float = 0.6) -> None:
         self.data = data.reset_index(drop=True, inplace=False)
+        self.train_size = train_size
         self.features = features
         self.clf_target = 'SPECTYPE'
         self.preprocess_clf_target = self.map_class_to_id
@@ -35,7 +36,7 @@ class TrainingData:
 
     def make_train_split(self) -> None:
         idx = np.arange(self.data.shape[0])
-        self.idx_train, self.idx_test = train_test_split(idx, test_size = 0.2, random_state=42)
+        self.idx_train, self.idx_test = train_test_split(idx, test_size = 1-self.train_size, random_state=42)
         self.idx_val, self.idx_test = train_test_split(self.idx_test, test_size=0.5, random_state=42)
 
     def fit_preprocessor(self) -> None:
