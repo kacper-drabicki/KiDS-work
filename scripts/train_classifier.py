@@ -14,7 +14,7 @@ timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
 MODEL_DIR = Path('saved_models/classification')
 MODEL_PATH = MODEL_DIR / f'xgb_clf_{timestamp}.json'
 
-def main():
+def main() -> None:
 
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -25,7 +25,7 @@ def main():
     merged_catalogs = merge_training_catalogs(kids_x_desi, kids_x_sdss)
 
     logger.info('Preparing training data ...')
-    training_data = TrainingData(merged_catalogs, features=clf_features)
+    training_data = TrainingData(merged_catalogs, features=clf_features, train_size=0.6)
     X_train, y_train = training_data.get_train_clf()
     X_val, y_val = training_data.get_val_clf()
 

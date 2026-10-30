@@ -23,7 +23,7 @@ LEARNING_RATE = 3E-4
 N_EPOCHS = 200
 PATIENCE = 30
 
-def main():
+def main() -> None:
     kids_x_desi = load_and_prepare_training_catalog(DESI_CATALOG_PATH)
     kids_x_sdss = load_and_prepare_training_catalog(SDSS_CATALOG_PATH)
     merged_catalogs = merge_training_catalogs(kids_x_desi, kids_x_sdss)
