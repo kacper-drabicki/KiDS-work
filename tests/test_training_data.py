@@ -14,7 +14,7 @@ def data():
     })
 
 def test_make_train_split(data):
-    training_data = TrainingData(data, features=["f1", "f2"])
+    training_data = TrainingData(data, features=["f1", "f2"], train_size=0.8)
     
     assert len(training_data.idx_train) == 80
     assert len(training_data.idx_val) == 10
