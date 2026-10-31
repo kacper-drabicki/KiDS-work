@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 from kids.logger import logger
-from kids.ml.classification.classifier import XGBClf
+from kids.ml.classification.xgbclf import XGBClf
 from kids.catalog.cleaning import clean_mask, replace_sentinel
 from kids.catalog.features import add_colors, add_ratios
 from kids.ml.training_data import TrainingData
