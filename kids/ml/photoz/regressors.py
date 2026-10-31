@@ -16,8 +16,7 @@ class MixtureNormalLayer(nn.Module):
     def forward(self, x: torch.Tensor) -> D.Distribution:
         # Split the input tensor into logits, locs (means), and scales (stds)
         pi_logits, locs, raw_scales = torch.split(
-            x, self.n_mixture_components, dim=-1
-        )
+            x, self.n_mixture_components, dim=-1)
         
         # Standard deviations must be positive; add epsilon for numerical stability
         scales = F.softplus(raw_scales + 0.5413) + 1e-5 # 0.5413 to match TF implementation

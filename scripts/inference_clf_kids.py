@@ -2,7 +2,7 @@ from pathlib import Path
 from kids.logger import logger
 from kids.inferencer import Inferencer
 from kids.catalog.preparation import load_and_prepare_training_catalog, merge_training_catalogs
-from kids.ml.classification.classifier import XGBClf
+from kids.ml.classification.xgbclf import XGBClf
 from kids.ml.training_data import TrainingData
 from kids.catalog.features import CLF_FEATURES
 
