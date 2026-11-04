@@ -31,7 +31,7 @@ Run scripts from the repository root:
 
 ```bash
 uv run python scripts/train_classifier.py
-uv run python scripts/train_photoz_regressor.py
+uv run python scripts/train_photoz_bnn.py
 uv run python scripts/train_som.py
 ```
 
@@ -40,6 +40,18 @@ Run classifier inference with:
 ```bash
 uv run python scripts/inference_clf_kids.py
 ```
+
+Run quasar photo-z inference with:
+
+```bash
+uv run python scripts/inference_photoz_kids.py
+```
+
+Photo-z inference treats every valid row in the input catalog as a quasar. It
+does not require classification output. The generated catalog contains the
+`PREDICTED_Z` and `PREDICTED_Z_STD` columns. Use `--model-type mdn` for an MDN
+checkpoint; BNN inference also supports repeated stochastic passes with
+`--bnn-samples`.
 
 The notebooks in `notebooks/` contain exploratory analysis, training, and
 visualization workflows. Run the tests with:
