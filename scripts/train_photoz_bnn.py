@@ -1,5 +1,4 @@
 import datetime
-import torch
 from torch.optim import Adam
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from pathlib import Path
@@ -45,7 +44,6 @@ def main() -> None:
 
     optimizer = Adam(model.parameters(), lr=training_config.learning_rate)
 
-    # scheduler = OneCycleLR(optimizer, max_lr=LEARNING_RATE, steps_per_epoch=len(train_loader), epochs=N_EPOCHS)
     scheduler = ReduceLROnPlateau(optimizer, mode=training_config.mode, 
                                   factor=training_config.factor, 
                                   patience=training_config.scheduler_patience)

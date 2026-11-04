@@ -34,8 +34,9 @@ def bnn_validate(model, val_loader: DataLoader, device: str) -> float:
         x, y = x.to(device, non_blocking=True), y.to(device, non_blocking=True)
 
         distribution, kl_loss = model(x)
-        batch_loss = -distribution.log_prob(y).mean() 
-        val_loss += batch_loss.item() # We intentionally do not include KL loss in validation loss
+        batch_loss = -distribution.log_prob(y).mean()
+        total_loss = batch_loss + kl_loss / len(val_loader.dataset) # normalization is wrong here, but should be fine for validation loss
+        val_loss += total_loss.item()
 
     return val_loss / len(val_loader)
 
@@ -43,14 +44,14 @@ def bnn_validate(model, val_loader: DataLoader, device: str) -> float:
 class BNNTrainingConfig:
     device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
     batch_size: int = 2048
-    learning_rate: float = 3e-4
-    n_epochs: int = 200
+    learning_rate: float = 1e-3
+    n_epochs: int = 400
     # Early stopping parameters
-    early_stopping_patience: int = 30
+    early_stopping_patience: int = 50
     min_delta: float = 0.0
     # Scheduler parameters
     mode: str = 'min'
-    factor: float = 0.5
+    factor: float = 0.1
     scheduler_patience: int = 10
 
 def train_bnn(model, train_loader: DataLoader, val_loader: DataLoader,

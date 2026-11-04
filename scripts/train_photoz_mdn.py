@@ -1,5 +1,4 @@
 import datetime
-import torch
 from torch.optim import Adam
 from torch.optim.lr_scheduler import OneCycleLR
 from pathlib import Path

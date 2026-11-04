@@ -93,7 +93,7 @@ class MixtureDensityNetwork(nn.Module):
 
 @dataclass
 class BNConfig:
-    n_mixture_components: int = 5
+    n_mixture_components: int = 3
     n_features: int = 55
     n_neurons: int = 512
 
@@ -105,6 +105,7 @@ class BayesianNet(nn.Module):
         self.config = config
 
         self._build_model()
+        self.apply(self._init_weights)
 
     def _build_model(self):
         layers = [nn.Linear(self.config.n_features, self.config.n_neurons),
@@ -127,8 +128,12 @@ class BayesianNet(nn.Module):
 
         self.mixture_layer = MixtureNormalLayer(self.config.n_mixture_components)
 
-    def _init_weights(self, m: nn.Module):
-        pass
+    @staticmethod
+    def _init_weights(m: nn.Module):
+        if isinstance(m, nn.Linear):
+            nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.zeros_(m.bias)
 
     def forward(self, x: torch.Tensor) -> tuple[D.Distribution, torch.Tensor]:
         
