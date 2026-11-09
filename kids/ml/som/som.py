@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 # ------------------------------------------ 
 
-@dataclass
+@dataclass(frozen=True)
 class SOMConfig:
     x: int = 60
     y: int = 60

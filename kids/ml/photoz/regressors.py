@@ -29,7 +29,7 @@ class MixtureNormalLayer(nn.Module):
 
 # ------------------------------------------ 
 
-@dataclass
+@dataclass(Frozen=True)
 class MDNConfig:
     n_mixture_components: int = 5
     n_features: int = 55
@@ -91,7 +91,7 @@ class MixtureDensityNetwork(nn.Module):
         
 # ------------------------------------------ 
 
-@dataclass
+@dataclass(Frozen=True)
 class BNConfig:
     n_mixture_components: int = 3
     n_features: int = 55
