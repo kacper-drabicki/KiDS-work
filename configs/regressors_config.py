@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-@dataclass(Frozen=True)
+@dataclass(frozen=True)
 class MDNConfig:
     n_mixture_components: int = 5
     n_features: int = 55
@@ -9,7 +9,7 @@ class MDNConfig:
 
 # ------------------------------------------
 
-@dataclass(Frozen=True)
+@dataclass(frozen=True)
 class BNConfig:
     n_mixture_components: int = 3
     n_features: int = 55

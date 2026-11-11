@@ -11,17 +11,15 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from kids.ml.photoz.regressors import (
     BayesianNet,
-    BNConfig,
     MixtureDensityNetwork,
-    MDNConfig,
     MixtureNormalLayer,
 )
 from kids.ml.photoz.train_bnn import (
-    BNNTrainingConfig,
     bnn_train_one_epoch,
-    bnn_validate,
     train_bnn,
 )
+from configs.regressors_config import MDNConfig, BNConfig
+from configs.train_bnn_config import BNNTrainingConfig
 from kids.ml.photoz.train_core import EarlyStopping, get_data_loader
 from kids.ml.photoz.train_mdn import mdn_train_one_epoch, mdn_validate
 
