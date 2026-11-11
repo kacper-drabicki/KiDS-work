@@ -1,8 +1,8 @@
 import torch
-from dataclasses import dataclass
 from torch.utils.data import DataLoader
 from kids.logger import logger
 from kids.ml.photoz.train_core import EarlyStopping
+from configs.train_bnn_config import BNNTrainingConfig
 
 
 def bnn_train_one_epoch(model, train_loader: DataLoader, optimizer, device: str) -> float:
@@ -39,20 +39,6 @@ def bnn_validate(model, val_loader: DataLoader, device: str) -> float:
         val_loss += total_loss.item()
 
     return val_loss / len(val_loader)
-
-@dataclass
-class BNNTrainingConfig:
-    device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
-    batch_size: int = 2048
-    learning_rate: float = 1e-3
-    n_epochs: int = 400
-    # Early stopping parameters
-    early_stopping_patience: int = 50
-    min_delta: float = 0.0
-    # Scheduler parameters
-    mode: str = 'min'
-    factor: float = 0.1
-    scheduler_patience: int = 10
 
 def train_bnn(model, train_loader: DataLoader, val_loader: DataLoader,
                 optimizer, scheduler, config: BNNTrainingConfig) -> list[dict[str, float]]:

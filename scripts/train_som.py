@@ -7,18 +7,19 @@ from kids.logger import logger
 from kids.catalog.preparation import load_and_prepare_inference_catalog
 from kids.ml.som.som_utils import get_preprocessor
 from kids.catalog.features import CLF_FEATURES
-from kids.ml.som.som import SOMConfig, MySOM
+from kids.ml.som.som import MySOM
+from configs.som_config import SOMConfig
 
 
 DATA_DIR = Path("data")
-DATA_PATH = DATA_DIR / "KiDS_DR5_WCScut_columns_15MLN.csv"
+DATA_PATH = DATA_DIR / "raw_data" / "KiDS_DR5_WCScut_columns_15MLN.csv"
 
 timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
 MODEL_DIR = Path("saved_models/som")
 MODEL_PATH = MODEL_DIR / f"som_{timestamp}.pth"
 PREPROCESSOR_PATH = MODEL_DIR / f"preprocessor_{timestamp}.joblib"
 
-N_SAMPLES_FOR_PREPROCESSOR = 2_500_000
+N_SAMPLES_FOR_PREPROCESSOR = 5_000_000
 
 def main() -> None:
     

@@ -1,8 +1,8 @@
 import torch
-from dataclasses import dataclass
 from torch.utils.data import DataLoader
 from kids.logger import logger
 from kids.ml.photoz.train_core import EarlyStopping
+from configs.train_mdn_config import MDNTrainingConfig
 
 def mdn_train_one_epoch(model, train_loader: DataLoader, optimizer, device: str, scheduler = None) -> float:
     model.train()   
@@ -38,18 +38,6 @@ def mdn_validate(model, val_loader: DataLoader, device: str) -> float:
         val_loss += batch_loss.item()
 
     return val_loss / len(val_loader)
-
-@dataclass
-class MDNTrainingConfig:
-    device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
-    batch_size: int = 2048
-    learning_rate: float = 3e-4
-    n_epochs: int = 200
-    # Early stopping parameters
-    early_stopping_patience: int = 30
-    min_delta: float = 0.0
-    # Scheduler parameters
-    max_lr: float = 3e-4
 
 def train_mdn(model, train_loader: DataLoader, val_loader: DataLoader,
                 optimizer, scheduler, config: MDNTrainingConfig) -> list[dict[str, float]]:

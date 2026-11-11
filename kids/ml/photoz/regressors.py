@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.distributions as D
 import torch.nn.functional as F
 from bayesian_torch.layers import LinearFlipout
-from dataclasses import dataclass
+from configs.regressors_config import MDNConfig, BNConfig
 
 # ------------------------------------------ 
 
@@ -28,15 +28,6 @@ class MixtureNormalLayer(nn.Module):
         return D.MixtureSameFamily(categorical, component)
 
 # ------------------------------------------ 
-
-@dataclass(Frozen=True)
-class MDNConfig:
-    n_mixture_components: int = 5
-    n_features: int = 55
-    n_neurons: int = 512
-    dropout_rate: float = 0.2
-
-# ------------------------------------------
 
 class MixtureDensityNetwork(nn.Module):
     def __init__(self, config: MDNConfig):
@@ -89,14 +80,6 @@ class MixtureDensityNetwork(nn.Module):
         self.load_state_dict(torch.load(path, map_location=torch.device(device)))
         
         
-# ------------------------------------------ 
-
-@dataclass(Frozen=True)
-class BNConfig:
-    n_mixture_components: int = 3
-    n_features: int = 55
-    n_neurons: int = 512
-
 # ------------------------------------------ 
 
 class BayesianNet(nn.Module):

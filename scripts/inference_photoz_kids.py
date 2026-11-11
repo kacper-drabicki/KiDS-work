@@ -9,11 +9,10 @@ from kids.inferencer import Inferencer
 from kids.logger import logger
 from kids.ml.photoz.regressors import (
     BayesianNet,
-    BNConfig,
-    MDNConfig,
     MixtureDensityNetwork,
 )
 from kids.ml.training_data import TrainingData
+from configs.regressors_config import BNConfig, MDNConfig
 
 
 DATA_DIR = Path("data")

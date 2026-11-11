@@ -8,8 +8,11 @@ from kids.catalog.preparation import load_and_prepare_training_catalog, merge_tr
 from kids.catalog.features import PHOTOZ_FEATURES
 from kids.ml.training_data import TrainingData
 from kids.ml.photoz.train_core import get_data_loader, plot_training_history
-from kids.ml.photoz.train_bnn import train_bnn, BNNTrainingConfig
-from kids.ml.photoz.regressors import BayesianNet, BNConfig
+from kids.ml.photoz.train_bnn import train_bnn
+from kids.ml.photoz.regressors import BayesianNet
+from configs.regressors_config import BNConfig
+from configs.train_bnn_config import BNNTrainingConfig
+
 
 DATA_DIR = Path('data')
 DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'

@@ -8,8 +8,10 @@ from kids.catalog.preparation import load_and_prepare_training_catalog, merge_tr
 from kids.catalog.features import PHOTOZ_FEATURES
 from kids.ml.training_data import TrainingData
 from kids.ml.photoz.train_core import get_data_loader, plot_training_history
-from kids.ml.photoz.train_mdn import train_mdn, MDNTrainingConfig
-from kids.ml.photoz.regressors import MixtureDensityNetwork, MDNConfig
+from kids.ml.photoz.train_mdn import train_mdn
+from kids.ml.photoz.regressors import MixtureDensityNetwork
+from configs.regressors_config import MDNConfig
+from configs.train_mdn_config import MDNTrainingConfig
 
 DATA_DIR = Path('data')
 DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
