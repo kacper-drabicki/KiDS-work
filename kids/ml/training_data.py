@@ -41,8 +41,10 @@ class TrainingData:
 
     def fit_preprocessor(self) -> None:
         X_train = self.data.loc[self.idx_train, self.features]
-        self.preprocess_features = Pipeline([('imputer', SimpleImputer(missing_values=np.nan, strategy=self.impute_with_max)),
-                                      ('scaler', MinMaxScaler())])
+        self.preprocess_features = Pipeline([
+            #('imputer', SimpleImputer(missing_values=np.nan, strategy=self.impute_with_max)),
+            ('scaler', MinMaxScaler()),
+            ])
         self.preprocess_features.fit(X_train)
 
     def get_train_clf(self) -> tuple[np.ndarray, pd.Series]:

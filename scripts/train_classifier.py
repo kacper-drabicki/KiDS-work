@@ -9,8 +9,8 @@ from configs.xgbclf_config import XGBConfig
 from kids.catalog.features import CLF_FEATURES
 
 DATA_DIR = Path('data')
-DESI_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
-SDSS_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv'
+DESI_CATALOG_PATH = DATA_DIR / 'raw_data' / 'KiDS_DR5_WCScut_x_DESI_DR1_columns.csv'
+SDSS_CATALOG_PATH = DATA_DIR / 'raw_data' / 'KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv'
 
 timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
 MODEL_DIR = Path('saved_models/classification')
