@@ -1,15 +1,16 @@
 import datetime
-from torch.optim import Adam
-from torch.optim.lr_scheduler import OneCycleLR
 from pathlib import Path
+
+from lightning import Trainer, seed_everything
+from lightning.pytorch.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint
+from lightning.pytorch.loggers import CSVLogger
 
 from kids.logger import logger
 from kids.catalog.preparation import load_and_prepare_training_catalog, merge_training_catalogs
 from kids.catalog.features import PHOTOZ_FEATURES
 from kids.ml.training_data import TrainingData
-from kids.ml.photoz.train_core import get_data_loader, plot_training_history
-from kids.ml.photoz.train_mdn import train_mdn
-from kids.ml.photoz.regressors import MixtureDensityNetwork
+from kids.ml.photoz.train_core import get_data_loader
+from kids.ml.photoz.lightning_mdn import MDNLightningModule
 from configs.regressors_config import MDNConfig
 from configs.train_mdn_config import MDNTrainingConfig
 
@@ -20,10 +21,11 @@ SDSS_CATALOG_PATH = DATA_DIR / 'KiDS_DR5_WCScut_x_SDSS_DR17_columns.csv'
 timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H-%M-%SZ')
 MODEL_DIR = Path('saved_models/photoz')
 MODEL_PATH = MODEL_DIR / f'mdn_photoz_{timestamp}.pt'
+CHECKPOINT_DIR = MODEL_DIR / 'lightning_checkpoints'
 
 def main() -> None:
-    
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    seed_everything(42, workers=True)
 
     logger.info('Loading and preparing training catalogs ...')
     kids_x_desi = load_and_prepare_training_catalog(DESI_CATALOG_PATH)
@@ -38,33 +40,50 @@ def main() -> None:
 
     training_config = MDNTrainingConfig()
 
-    train_loader = get_data_loader(X_train, y_train, batch_size=training_config.batch_size)
-    val_loader = get_data_loader(X_val, y_val, batch_size=training_config.batch_size)
-    
-    model = MixtureDensityNetwork(MDNConfig())
-    model.to(training_config.device)
-
-    optimizer = Adam(model.parameters(), lr=training_config.learning_rate)
-
-    scheduler = OneCycleLR(optimizer=optimizer, 
-                           steps_per_epoch=len(train_loader),
-                           max_lr=training_config.max_lr, 
-                           epochs=training_config.n_epochs)
+    train_loader = get_data_loader(
+        X_train, y_train, batch_size=training_config.batch_size
+    )
+    val_loader = get_data_loader(
+        X_val, y_val, batch_size=training_config.batch_size
+    )
+    model = MDNLightningModule(MDNConfig(), training_config)
+    checkpoint = ModelCheckpoint(
+        dirpath=CHECKPOINT_DIR,
+        filename='mdn-{epoch:03d}-{val_loss:.4f}',
+        monitor='val_loss',
+        mode='min',
+        save_top_k=1,
+        save_last=True,
+    )
+    trainer = Trainer(
+        accelerator='auto',
+        devices='auto',
+        max_epochs=training_config.n_epochs,
+        callbacks=[
+            checkpoint,
+            EarlyStopping(
+                monitor='val_loss',
+                mode='min',
+                patience=training_config.early_stopping_patience,
+                min_delta=training_config.min_delta,
+            ),
+            LearningRateMonitor(logging_interval='step'),
+        ],
+        logger=CSVLogger(save_dir=str(MODEL_DIR), name='mdn_logs'),
+        log_every_n_steps=1,
+        enable_progress_bar=True,
+    )
 
     logger.info('Training starts ...')
-    history = train_mdn(model=model, 
-                        train_loader=train_loader, 
-                        val_loader=val_loader, 
-                        optimizer=optimizer,
-                        scheduler=scheduler,
-                        config=training_config)
+    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=val_loader)
 
-    model.save(MODEL_PATH)
+    best_model = MDNLightningModule.load_from_checkpoint(
+        checkpoint.best_model_path,
+        model_config=MDNConfig(),
+        training_config=training_config,
+    )
+    best_model.model.save(MODEL_PATH)
     logger.info(f'Model saved as {MODEL_PATH}')
-
-    plot_training_history(history)
 
 if __name__ == '__main__':
     main()
-
-

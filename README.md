@@ -36,6 +36,10 @@ uv run python scripts/train_photoz_mdn.py
 uv run python scripts/train_som.py
 ```
 
+The MDN photo-z workflow uses PyTorch Lightning for device management,
+validation, early stopping, checkpointing, and CSV metric logging. The script
+also exports the best model as a plain PyTorch state-dict file for inference.
+
 Run classifier inference with:
 
 ```bash
