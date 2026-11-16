@@ -46,6 +46,7 @@ def main() -> None:
         input_path=INPUT_PATH,
         preprocessor=training_data.preprocess_features,
         features=PHOTOZ_FEATURES)
+    
     inference.infer_quasar_photoz(
         model=model,
         output_path=OUTPUT_PATH,
